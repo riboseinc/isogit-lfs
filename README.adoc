@@ -13,7 +13,7 @@ and `content` is a `Buffer`.
 +
 where `http` is an `HttpClient` as supported by Isomorphic Git,
 URL is repository URL
-and pointer is an object returned by `readPointer()`.
+and `lfsPointer` is an object returned by `readPointer()`.
 
 - `populateCache(workDir, ref?)`
 +
