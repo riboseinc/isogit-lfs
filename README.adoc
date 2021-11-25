@@ -1,0 +1,21 @@
+Aspirationally, it is a set of low-level helpers
+to simplify working with Git LFS via Isomorphic Git.
+
+As of 0.1.0, support is limited to:
+
+- `readPointer({ dir, gitdir, content })`
++
+where `dir`, `gitdir` behavior mimics that of Isomorphic Git,
+and content is a `Buffer`.
+
+
+- `downloadBlobFromPointer({ http, headers, url }, lfsPointer)`
++
+where `http` is an `HttpClient` as supported by Isomorphic Git,
+URL is repository URL
+and pointer is an object returned by `readPointer()`.
+
+- `populateCache(workDir, ref?)`
++
+where `workDir` is a path to working directory,
+and `ref` should probably be left at the default `"HEAD"`.
