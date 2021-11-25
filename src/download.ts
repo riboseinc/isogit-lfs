@@ -33,6 +33,7 @@ export default async function downloadBlobFromPointer(
   { http: { request }, headers = {}, url }: DownloadBlobRequset,
   { info, objectPath }: Pointer
 ): Promise<Buffer> {
+
   // Request LFS metadata
 
   const lfsInfoRequestData = {
@@ -58,6 +59,7 @@ export default async function downloadBlobFromPointer(
   if (isValidLFSInfoResponseData(lfsInfoResponseData)) {
 
     // Request the actual blob
+
     const lfsObjectDownloadURL = lfsInfoResponseData.objects[0].actions.download.href;
 
     const { body: lfsObjectBody } = await request({
