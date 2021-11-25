@@ -14,7 +14,7 @@ export interface Pointer {
 }
 
 function isValidPointerInfo(val: Record<string, any>): val is PointerInfo {
-  return val.oid.trim !== undefined && val.oid.size !== undefined;
+  return val.oid.trim !== undefined && val.size.trim !== undefined;
 }
 
 interface PointerRequest {
