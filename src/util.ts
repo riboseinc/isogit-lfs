@@ -20,12 +20,27 @@ export async function isWriteable(filepath: string): Promise<boolean> {
     await fs.access(filepath, fsConstants.W_OK);
     return true;
   } catch (e) {
-    if ((e as { code: string }).code !== 'ENOENT') {
-      return false;
-    } else {
+    if ((e as { code: string }).code === 'ENOENT') {
+      return true;
+    }
+    return false;
+  }
+}
+
+
+/**
+ * Returns true if given path is available for writing
+ * and not occupied.
+ */
+export async function isVacantAndWriteable(filepath: string): Promise<boolean> {
+  try {
+    await fs.access(filepath, fsConstants.W_OK);
+  } catch (e) {
+    if ((e as { code: string }).code === 'ENOENT') {
       return true;
     }
   }
+  return false;
 }
 
 

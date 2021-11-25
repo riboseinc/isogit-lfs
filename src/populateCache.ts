@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 
-import { isWriteable, pointsToLFS } from './util';
+import { isVacantAndWriteable, isWriteable, pointsToLFS } from './util';
 import downloadBlobFromPointer from './download';
 import { readPointer } from "./pointers";
 
@@ -55,8 +55,9 @@ export default async function populateCache(workDir: string, ref: string = 'HEAD
             if (pointsToLFS(buff)) {
               const pointer = readPointer({ dir: workDir, content: buff });
 
-              // Don’t even start the download if LFS cache path is not accessible.
-              if (await isWriteable(pointer.objectPath) === false)
+              // Don’t even start the download if LFS cache path is not accessible,
+              // or if it already exists
+              if (await isVacantAndWriteable(pointer.objectPath) === false)
                 return;
 
               const content = await downloadBlobFromPointer(
