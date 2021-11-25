@@ -6,7 +6,7 @@ As of 0.1.0, support is limited to:
 - `readPointer({ dir, gitdir, content })`
 +
 where `dir`, `gitdir` behavior mimics that of Isomorphic Git,
-and content is a `Buffer`.
+and `content` is a `Buffer`.
 
 
 - `downloadBlobFromPointer({ http, headers, url }, lfsPointer)`
