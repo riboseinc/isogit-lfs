@@ -1,10 +1,9 @@
-import path from 'path';
 import fs from 'fs/promises';
 
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 
-import { isVacantAndWriteable, isWriteable, pointsToLFS } from './util';
+import { isVacantAndWriteable, pointsToLFS } from './util';
 import downloadBlobFromPointer from './download';
 import { readPointer } from "./pointers";
 
@@ -64,12 +63,7 @@ export default async function populateCache(workDir: string, ref: string = 'HEAD
                 { http, url: remoteURL },
                 pointer);
 
-              // Write LFS cache for this object, if cache path is still accessible.
-              if (await isWriteable(pointer.objectPath) === false)
-                return;
 
-              await fs.mkdir(path.dirname(pointer.objectPath), { recursive: true });
-              await fs.writeFile(pointer.objectPath, content);
             }
           }
         }
