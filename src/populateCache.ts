@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+import fs from 'fs';
 
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
