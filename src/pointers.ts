@@ -3,7 +3,7 @@ import path from 'path';
 
 interface PointerInfo {
   oid: string;
-  size: string;
+  size: number;
 }
 
 export interface Pointer {
@@ -14,7 +14,7 @@ export interface Pointer {
 }
 
 function isValidPointerInfo(val: Record<string, any>): val is PointerInfo {
-  return val.oid.trim !== undefined && val.size.trim !== undefined;
+  return val.oid.trim !== undefined && typeof val.size === 'number';
 }
 
 interface PointerRequest {
@@ -30,7 +30,7 @@ export function readPointer({ dir, gitdir = path.join(dir, '.git'), content }: P
     if (k === 'oid') {
       accum[k] = v.split(':', 2)[1];
     } else if (k === 'size') {
-      accum[k] = v;
+      accum[k] = parseInt(v, 10);
     }
     return accum;
   }, {} as Record<string, any>);
