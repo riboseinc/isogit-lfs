@@ -1,6 +1,8 @@
+import path from 'path';
+import fsp from 'fs/promises';
 import { HttpClient } from 'isomorphic-git/http/node';
 
-import { bodyToBuffer } from './util';
+import { bodyToBuffer, isWriteable } from './util';
 import { Pointer } from './pointers';
 
 
@@ -28,7 +30,9 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
 }
 
 
-/** Downloads a blob corresponding to given LFS pointer. */
+/**
+ * Downloads, caches and returns a blob corresponding to given LFS pointer.
+ */
 export default async function downloadBlobFromPointer(
   { http: { request }, headers = {}, url }: DownloadBlobRequset,
   { info, objectPath }: Pointer,
@@ -73,7 +77,15 @@ export default async function downloadBlobFromPointer(
       headers: dlHeaders,
     });
 
-    return await bodyToBuffer(lfsObjectBody);
+    const blob = await bodyToBuffer(lfsObjectBody);
+
+    // Write LFS cache for this object, if cache path is still accessible and unoccupied.
+    if (await isWriteable(objectPath)) {
+      await fsp.mkdir(path.dirname(objectPath), { recursive: true });
+      await fsp.writeFile(objectPath, blob);
+    }
+
+    return blob;
 
   } else {
     throw new Error("LFS response didn’t return an expected structure");
