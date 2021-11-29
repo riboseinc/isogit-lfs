@@ -12,6 +12,9 @@ interface DownloadBlobRequset {
 
   /** Repository URL. */
   url: string;
+
+  /** Auth data for basic HTTP auth. */
+  auth?: { username: string, password: string }
 }
 
 interface LFSInfoResponse {
@@ -35,9 +38,16 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
  * Currently, the authorization header is responsibility of the caller.
  */
 export default async function downloadBlobFromPointer(
-  { http: { request }, headers = {}, url }: DownloadBlobRequset,
+  { http: { request }, headers = {}, url, auth }: DownloadBlobRequset,
   { info, objectPath }: Pointer,
 ): Promise<Buffer> {
+
+  const authHeaders: Record<string, string> = auth
+    ? {
+        'Authorization':
+          `Basic ${Buffer.from(`${auth.username}:${auth.password}`).toString('base64')}`,
+      }
+    : {};
 
   // Request LFS metadata
 
@@ -54,6 +64,7 @@ export default async function downloadBlobFromPointer(
       // Github LFS doesn’t seem to accept this UA :(
       // 'User-Agent': `git/isomorphic-git@${git.version()}`,
       ...headers,
+      ...authHeaders,
       'Accept': 'application/vnd.git-lfs+json',
       'Content-Type': 'application/vnd.git-lfs+json',
     },
@@ -76,7 +87,11 @@ export default async function downloadBlobFromPointer(
     const lfsObjectDownloadURL = downloadAction.href;
     const lfsObjectDownloadHeaders = downloadAction.header ?? {};
 
-    const dlHeaders = { ...headers, ...lfsObjectDownloadHeaders };
+    const dlHeaders = {
+      ...headers,
+      ...authHeaders,
+      ...lfsObjectDownloadHeaders,
+    };
 
     const { body: lfsObjectBody } = await request({
       url: lfsObjectDownloadURL,
