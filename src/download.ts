@@ -31,7 +31,7 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
 /** Downloads a blob corresponding to given LFS pointer. */
 export default async function downloadBlobFromPointer(
   { http: { request }, headers = {}, url }: DownloadBlobRequset,
-  { info, objectPath }: Pointer
+  { info, objectPath }: Pointer,
 ): Promise<Buffer> {
 
   // Request LFS metadata
