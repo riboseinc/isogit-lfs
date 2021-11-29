@@ -46,7 +46,8 @@ export default async function downloadBlobFromPointer(
     url: `${url}/info/lfs/objects/batch`,
     method: 'POST',
     headers: {
-      'User-Agent': `git/isomorphic-git@${git.version()}`,
+      // Github LFS doesn’t seem to accept this UA :(
+      // 'User-Agent': `git/isomorphic-git@${git.version()}`,
       ...headers,
       'Accept': 'application/vnd.git-lfs+json',
       'Content-Type': 'application/vnd.git-lfs+json',
