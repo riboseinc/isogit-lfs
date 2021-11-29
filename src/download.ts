@@ -18,6 +18,7 @@ interface LFSInfoResponse {
     actions: {
       download: {
         href: string;
+        header?: Record<string, string>;
       };
     };
   }[];
@@ -61,12 +62,16 @@ export default async function downloadBlobFromPointer(
 
     // Request the actual blob
 
-    const lfsObjectDownloadURL = lfsInfoResponseData.objects[0].actions.download.href;
+    const downloadAction = lfsInfoResponseData.objects[0].actions.download;
+    const lfsObjectDownloadURL = downloadAction.href;
+    const lfsObjectDownloadHeaders = downloadAction.header ?? {};
+
+    const dlHeaders = { ...headers, ...lfsObjectDownloadHeaders };
 
     const { body: lfsObjectBody } = await request({
       url: lfsObjectDownloadURL,
       method: 'GET',
-      headers,
+      headers: dlHeaders,
     });
 
     return await bodyToBuffer(lfsObjectBody);
