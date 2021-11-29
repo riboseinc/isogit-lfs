@@ -1,4 +1,3 @@
-import git from 'isomorphic-git';
 import { HttpClient } from 'isomorphic-git/http/node';
 
 import { bodyToBuffer } from './util';
