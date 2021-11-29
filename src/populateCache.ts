@@ -59,10 +59,8 @@ export default async function populateCache(workDir: string, ref: string = 'HEAD
               if (await isVacantAndWriteable(pointer.objectPath) === false)
                 return;
 
-              const content = await downloadBlobFromPointer(
-                { http, url: remoteURL },
-                pointer);
 
+              await downloadBlobFromPointer({ http, url: remoteURL }, pointer);
 
             }
           }
