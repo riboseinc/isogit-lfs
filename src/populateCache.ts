@@ -33,7 +33,7 @@ export default async function populateCache(workDir: string, ref: string = 'HEAD
       fs,
       dir: workDir,
       trees: [git.TREE({ ref })],
-      map: async (filepath, entries) => {
+      map: async function lfsDownloadingWalker(filepath, entries) {
         if (entries === null || entries[0] === null) {
           return null;
         }
