@@ -59,7 +59,13 @@ export default async function downloadBlobFromPointer(
     body: [Buffer.from(JSON.stringify(lfsInfoRequestData))],
   });
 
-  const lfsInfoResponseData = JSON.parse((await bodyToBuffer(lfsInfoBody)).toString());
+  const lfsInfoResponseRaw = (await bodyToBuffer(lfsInfoBody)).toString();
+  let lfsInfoResponseData: any;
+  try {
+    lfsInfoResponseData = JSON.parse(lfsInfoResponseRaw);
+  } catch (e) {
+    throw new Error(`Unexpected structure received from LFS server: unable to parse JSON ${lfsInfoResponseRaw}`);
+  }
 
   if (isValidLFSInfoResponseData(lfsInfoResponseData)) {
 
