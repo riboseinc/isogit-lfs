@@ -35,7 +35,6 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
 
 /**
  * Downloads, caches and returns a blob corresponding to given LFS pointer.
- * Currently, the authorization header is responsibility of the caller.
  */
 export default async function downloadBlobFromPointer(
   { http: { request }, headers = {}, url, auth }: DownloadBlobRequest,
