@@ -1,21 +1,10 @@
 import path from 'path';
 import fsp from 'fs/promises';
-import { HttpClient } from 'isomorphic-git/http/node';
 
 import { bodyToBuffer, isWriteable } from './util';
 import { Pointer } from './pointers';
+import { HTTPRequest } from './types';
 
-
-interface DownloadBlobRequest {
-  http: HttpClient;
-  headers?: Record<string, any>;
-
-  /** Repository URL. */
-  url: string;
-
-  /** Auth data for basic HTTP auth. */
-  auth?: { username: string, password: string }
-}
 
 interface LFSInfoResponse {
   objects: {
@@ -37,7 +26,7 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
  * Downloads, caches and returns a blob corresponding to given LFS pointer.
  */
 export default async function downloadBlobFromPointer(
-  { http: { request }, headers = {}, url, auth }: DownloadBlobRequest,
+  { http: { request }, headers = {}, url, auth }: HTTPRequest,
   { info, objectPath }: Pointer,
 ): Promise<Buffer> {
 
