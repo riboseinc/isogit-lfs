@@ -95,6 +95,6 @@ export default async function downloadBlobFromPointer(
     return blob;
 
   } else {
-    throw new Error("LFS response didn’t return an expected structure");
+    throw new Error("Unexpected JSON structure received for LFS download request");
   }
 }
