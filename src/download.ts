@@ -1,7 +1,7 @@
 import path from 'path';
 import fsp from 'fs/promises';
 
-import { bodyToBuffer, isWriteable } from './util';
+import { bodyToBuffer, getAuthHeader, isWriteable } from './util';
 import { Pointer } from './pointers';
 import { HTTPRequest } from './types';
 
@@ -31,10 +31,7 @@ export default async function downloadBlobFromPointer(
 ): Promise<Buffer> {
 
   const authHeaders: Record<string, string> = auth
-    ? {
-        'Authorization':
-          `Basic ${Buffer.from(`${auth.username}:${auth.password}`).toString('base64')}`,
-      }
+    ? getAuthHeader(auth)
     : {};
 
   // Request LFS metadata

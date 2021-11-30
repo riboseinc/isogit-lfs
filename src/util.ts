@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import { constants as fsConstants } from 'fs';
+import { BasicAuth } from './types';
 
 export const LFS_POINTER_PREAMBLE = 'version https://git-lfs.github.com/spec/v1\n';
 
@@ -9,6 +10,18 @@ export function pointsToLFS(content: Buffer): boolean {
   return (
     content[0] === 118 // 'v'
     && content.subarray(0, 100).indexOf(LFS_POINTER_PREAMBLE) === 0);
+}
+
+
+/**
+ * Returns properly encoded HTTP Basic auth header,
+ * given basic auth credentials.
+ */
+export function getAuthHeader(auth: BasicAuth): Record<string, string> {
+  return {
+    'Authorization':
+      `Basic ${Buffer.from(`${auth.username}:${auth.password}`).toString('base64')}`,
+  };
 }
 
 
