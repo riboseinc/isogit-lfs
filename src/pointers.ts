@@ -6,7 +6,7 @@ const SPEC_URL = 'https://git-lfs.github.com/spec/v1';
 
 
 export interface PointerInfo {
-  /** SHA256 hash of the actual blob contents. */
+  /** OID (currently, SHA256 hash) of actual blob contents. */
   oid: string;
 
   /** Actual blob size in bytes. */
