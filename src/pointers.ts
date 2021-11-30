@@ -1,7 +1,7 @@
 import path from 'path';
 
 
-interface PointerInfo {
+export interface PointerInfo {
   /** SHA256 hash of the actual blob contents. */
   oid: string;
 
