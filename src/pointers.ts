@@ -2,14 +2,17 @@ import path from 'path';
 
 
 interface PointerInfo {
+  /** SHA256 hash of the actual blob contents. */
   oid: string;
+
+  /** Actual blob size in bytes. */
   size: number;
 }
 
 export interface Pointer {
   info: PointerInfo;
 
-  /** Path to blob in LFS cache. */
+  /** Absolute path to actual blob in LFS cache. */
   objectPath: string;
 }
 

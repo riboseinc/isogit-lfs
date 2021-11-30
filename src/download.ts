@@ -34,7 +34,7 @@ export default async function downloadBlobFromPointer(
     ? getAuthHeader(auth)
     : {};
 
-  // Request LFS metadata
+  // Request LFS transfer
 
   const lfsInfoRequestData = {
     operation: 'download',
