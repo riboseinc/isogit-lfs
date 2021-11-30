@@ -4,6 +4,7 @@ import { constants as fsConstants } from 'fs';
 export const LFS_POINTER_PREAMBLE = 'version https://git-lfs.github.com/spec/v1\n';
 
 
+/** Returns true if given blob represents an LFS pointer. */
 export function pointsToLFS(content: Buffer): boolean {
   return (
     content[0] === 118 // 'v'
