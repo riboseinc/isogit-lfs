@@ -6,7 +6,7 @@ import { bodyToBuffer, isWriteable } from './util';
 import { Pointer } from './pointers';
 
 
-interface DownloadBlobRequset {
+interface DownloadBlobRequest {
   http: HttpClient;
   headers?: Record<string, any>;
 
@@ -38,7 +38,7 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
  * Currently, the authorization header is responsibility of the caller.
  */
 export default async function downloadBlobFromPointer(
-  { http: { request }, headers = {}, url, auth }: DownloadBlobRequset,
+  { http: { request }, headers = {}, url, auth }: DownloadBlobRequest,
   { info, objectPath }: Pointer,
 ): Promise<Buffer> {
 
