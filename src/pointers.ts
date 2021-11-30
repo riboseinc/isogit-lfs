@@ -1,4 +1,8 @@
 import path from 'path';
+import { toHex } from './util';
+
+
+const SPEC_URL = 'https://git-lfs.github.com/spec/v1';
 
 
 export interface PointerInfo {
@@ -57,4 +61,22 @@ export function readPointer({ dir, gitdir = path.join(dir, '.git'), content }: P
     info.oid);
 
   return { info, objectPath };
+}
+
+
+/** Formats given PointerInfo for writing in Git tree. */
+export function formatPointerInfo(info: PointerInfo): Buffer {
+  const lines = [
+    `version ${SPEC_URL}`,
+    `oid sha256:${info.oid}`,
+    `size ${info.size}`,
+  ];
+  return Buffer.from(lines.join('\n'));
+}
+
+
+export async function buildPointerInfo(content: Buffer): Promise<PointerInfo> {
+  const size = Buffer.byteLength(content);
+  const hash = await crypto.subtle.digest('SHA-1', content);
+  return { oid: toHex(hash), size };
 }
