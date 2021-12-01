@@ -2,7 +2,10 @@ import fs from 'fs/promises';
 import { constants as fsConstants } from 'fs';
 import { BasicAuth } from './types';
 
-export const LFS_POINTER_PREAMBLE = 'version https://git-lfs.github.com/spec/v1\n';
+
+export const SPEC_URL = 'https://git-lfs.github.com/spec/v1';
+
+export const LFS_POINTER_PREAMBLE = `version ${SPEC_URL}\n`;
 
 
 /** Returns true if given blob represents an LFS pointer. */

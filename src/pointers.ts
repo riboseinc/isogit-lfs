@@ -1,8 +1,5 @@
 import path from 'path';
-import { toHex } from './util';
-
-
-const SPEC_URL = 'https://git-lfs.github.com/spec/v1';
+import { SPEC_URL, toHex } from './util';
 
 
 export interface PointerInfo {
