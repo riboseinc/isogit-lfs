@@ -1,4 +1,4 @@
-import { HttpClient, ProgressCallback } from 'isomorphic-git/http/node';
+import type { HttpClient } from 'isomorphic-git/http/node';
 
 
 export interface BasicAuth {
@@ -18,6 +18,4 @@ export interface HTTPRequest {
 
   /** Auth data for basic HTTP auth. */
   auth?: BasicAuth
-
-  onProgress?: ProgressCallback
 }
