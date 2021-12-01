@@ -22,7 +22,7 @@ function isValidPointerInfo(val: Record<string, any>): val is PointerInfo {
 }
 
 
-function readPointerInfo(content: Buffer): PointerInfo {
+export function readPointerInfo(content: Buffer): PointerInfo {
   const info = content.toString().trim().split('\n').reduce((accum, line) => {
     const [k, v] = line.split(' ', 2);
     if (k === 'oid') {
