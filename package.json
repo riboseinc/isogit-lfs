@@ -1,6 +1,6 @@
 {
   "name": "@riboseinc/isogit-lfs",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "LFS helpers for Isomorphic Git (Node only)",
   "main": "index.js",
   "repository": "git@github.com:riboseinc/isogit-lfs.git",
