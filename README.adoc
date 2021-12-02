@@ -1,5 +1,5 @@
-Aspirationally, it is a set of low-level helpers
-to simplify working with Git LFS via Isomorphic Git.
+Aspirationally, a set of helpers
+to simplify working with Git LFS through Isomorphic Git.
 
 
 == Installation
