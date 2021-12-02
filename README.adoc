@@ -1,21 +1,68 @@
 Aspirationally, it is a set of low-level helpers
 to simplify working with Git LFS via Isomorphic Git.
 
-As of 0.1.0, support is limited to:
 
-- `readPointer({ dir, gitdir, content })`
+== Installation
+
+Peer dependencies:
+
+- Isomorphic Git ^1.7.0
+- @aws-crypto/sha256-universal ^2.0.0
+
+
+== Usage
+
+As of 0.1.6, API offers the following functions:
+
+
+- `downloadBlobFromPointer({ http, headers, url, auth }, lfsPointer) => Buffer`
++
+where `http` is an `HttpClient` as supported by Isomorphic Git,
+URL is repository URL
+and `lfsPointer` is an object returned by `readPointer()`.
++
+Uses cache, if the object had been previously retrieved.
+
+
+- `uploadBlob({ http, headers, url, auth }, buffer) => LFSPointerInfo`
++
+where first argument is the same as for the download function,
+and returned pointer info can be used to write a pointer file in place
+of actual object in Git repository (pass it through `formatPointerInfo()`).
+
+
+- `readPointer({ dir, gitdir, content }): LFSPointer`
 +
 where `dir`, `gitdir` behavior mimics that of Isomorphic Git,
 and `content` is a `Buffer`.
 
 
-- `downloadBlobFromPointer({ http, headers, url }, lfsPointer)`
+- `readPointerInfo(buffer): LFSPointerInfo`
 +
-where `http` is an `HttpClient` as supported by Isomorphic Git,
-URL is repository URL
-and `lfsPointer` is an object returned by `readPointer()`.
+reads a properly formatted LFS pointer within a Git repository.
+
+
+- `formatPointerInfo(lfsPointerInfo)`
++
+converts pointer info to appropriately formatted blob
+suitable to be stored in Git repository in place of actual object data.
+
 
 - `populateCache(workDir, ref?)`
 +
 where `workDir` is a path to working directory,
 and `ref` should probably be left at the default `"HEAD"`.
+
+
+== Known shortcomings
+
+- Works in Node runtime only
+- @aws-crypto/sha256-universal peer dependency is unnecessary.
+If we’re Node-only we can probably achieve the same using Node’s `crypto` module,
+and if not we should place it in actual `dependencies`.
+
+== Considered within scope
+
+- Implement batch uploads and downloads (parallelise requests? use native batch API?)
+- Find a way to generalize UA header handling
+- Make it work in browser runtime as well (if feasible?)
