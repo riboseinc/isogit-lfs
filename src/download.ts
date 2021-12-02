@@ -86,7 +86,7 @@ export default async function downloadBlobFromPointer(
 
     const blob = await bodyToBuffer(lfsObjectBody);
 
-    // Write LFS cache for this object, if cache path is still accessible and unoccupied.
+    // Write LFS cache for this object, if cache path is accessible.
     if (await isWriteable(objectPath)) {
       await fsp.mkdir(path.dirname(objectPath), { recursive: true });
       await fsp.writeFile(objectPath, blob);
