@@ -31,18 +31,18 @@ and returned pointer info can be used to write a pointer file in place
 of actual object in Git repository (pass it through `formatPointerInfo()`).
 
 
-- `readPointer({ dir, gitdir, content }): LFSPointer`
+- `readPointer({ dir, gitdir, content }) => LFSPointer`
 +
 where `dir`, `gitdir` behavior mimics that of Isomorphic Git,
 and `content` is a `Buffer`.
 
 
-- `readPointerInfo(buffer): LFSPointerInfo`
+- `readPointerInfo(buffer) => LFSPointerInfo`
 +
 reads a properly formatted LFS pointer within a Git repository.
 
 
-- `formatPointerInfo(lfsPointerInfo)`
+- `formatPointerInfo(lfsPointerInfo) => Buffer`
 +
 converts pointer info to appropriately formatted blob
 suitable to be stored in Git repository in place of actual object data.
@@ -52,6 +52,8 @@ suitable to be stored in Git repository in place of actual object data.
 +
 where `workDir` is a path to working directory,
 and `ref` should probably be left at the default `"HEAD"`.
++
+NOTE: Very tentative API.
 
 
 == Known shortcomings
