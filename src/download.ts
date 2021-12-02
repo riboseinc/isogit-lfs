@@ -24,11 +24,24 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
 
 /**
  * Downloads, caches and returns a blob corresponding to given LFS pointer.
+ * Uses already cached object, if size matches.
  */
 export default async function downloadBlobFromPointer(
   { http: { request }, headers = {}, url, auth }: HTTPRequest,
   { info, objectPath }: Pointer,
 ): Promise<Buffer> {
+
+  try {
+    const cached = await fsp.readFile(objectPath);
+    if (cached.byteLength === info.size) {
+      return cached;
+    }
+  } catch (e) {
+    // Silence file not found errors (implies cache miss)
+    if ((e as any).code !== 'ENOENT') {
+      throw e;
+    }
+  }
 
   const authHeaders: Record<string, string> = auth
     ? getAuthHeader(auth)
