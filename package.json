@@ -21,9 +21,11 @@
     "email": "open.source@ribose.com"
   },
   "peerDependencies": {
-    "isomorphic-git": "^1.7.8"
+    "isomorphic-git": "^1.7.8",
+    "@aws-crypto/sha256-universal": "^2.0.0"
   },
   "devDependencies": {
+    "@aws-crypto/sha256-universal": "^2.0.0",
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",

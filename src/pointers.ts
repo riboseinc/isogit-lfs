@@ -1,7 +1,6 @@
-// This is Node-only code due to use of crypto.
-import crypto from 'crypto';
 import path from 'path';
-import { SPEC_URL } from './util';
+import { Sha256 } from '@aws-crypto/sha256-universal';
+import { SPEC_URL, toHex } from './util';
 
 
 export interface PointerInfo {
@@ -76,6 +75,8 @@ export function formatPointerInfo(info: PointerInfo): Buffer {
 
 export async function buildPointerInfo(content: Buffer): Promise<PointerInfo> {
   const size = Buffer.byteLength(content);
-  const hash = crypto.createHash('sha256').update(content).digest('hex');
-  return { oid: hash, size };
+  const hash = new Sha256();
+  hash.update(content);
+  const oid = toHex(await hash.digest());
+  return { oid, size };
 }

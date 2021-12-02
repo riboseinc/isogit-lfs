@@ -77,3 +77,14 @@ export async function bodyToBuffer(body: Uint8Array[]): Promise<Buffer> {
   }
   return Buffer.from(result.buffer);
 }
+
+
+// Borrowed from Isomorphic Git core, it is not importable.
+export function toHex(buffer: ArrayBuffer): string {
+  let hex = ''
+  for (const byte of new Uint8Array(buffer)) {
+    if (byte < 16) hex += '0'
+    hex += byte.toString(16)
+  }
+  return hex
+}
