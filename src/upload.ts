@@ -1,5 +1,5 @@
-import { HTTPRequest } from './types';
-import { buildPointerInfo, PointerInfo } from './pointers';
+import type { HTTPRequest } from './types';
+import { buildPointerInfo, type PointerInfo } from './pointers';
 import { bodyToBuffer, getAuthHeader } from './util';
 
 

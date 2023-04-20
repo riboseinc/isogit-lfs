@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import { constants as fsConstants } from 'fs';
-import { BasicAuth } from './types';
+import type { BasicAuth } from './types';
 
 
 export const SPEC_URL = 'https://git-lfs.github.com/spec/v1';
