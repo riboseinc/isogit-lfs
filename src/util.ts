@@ -1,5 +1,3 @@
-import fs from 'fs/promises';
-import { constants as fsConstants } from 'fs';
 import type { BasicAuth } from './types';
 
 
@@ -7,12 +5,19 @@ export const SPEC_URL = 'https://git-lfs.github.com/spec/v1';
 
 export const LFS_POINTER_PREAMBLE = `version ${SPEC_URL}\n`;
 
+const textDecoder = new TextDecoder('utf-8');
+
+
+export function stripTrailingSlash(aPath: string): string {
+  return aPath.replace(/\/$/, '');
+}
+
 
 /** Returns true if given blob represents an LFS pointer. */
-export function pointsToLFS(content: Buffer): boolean {
+export function pointsToLFS(content: Uint8Array): boolean {
   return (
     content[0] === 118 // 'v'
-    && content.subarray(0, 100).indexOf(LFS_POINTER_PREAMBLE) === 0);
+    && textDecoder.decode(content.subarray(0, 100)).indexOf(LFS_POINTER_PREAMBLE) === 0);
 }
 
 
@@ -23,45 +28,12 @@ export function pointsToLFS(content: Buffer): boolean {
 export function getAuthHeader(auth: BasicAuth): Record<string, string> {
   return {
     'Authorization':
-      `Basic ${Buffer.from(`${auth.username}:${auth.password}`).toString('base64')}`,
+      `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
   };
 }
 
 
-/**
- * Returns true if given path is available for writing,
- * regardless of whether or not it is occupied.
- */
-export async function isWriteable(filepath: string): Promise<boolean> {
-  try {
-    await fs.access(filepath, fsConstants.W_OK);
-    return true;
-  } catch (e) {
-    if ((e as { code: string }).code === 'ENOENT') {
-      return true;
-    }
-    return false;
-  }
-}
-
-
-/**
- * Returns true if given path is available for writing
- * and not occupied.
- */
-export async function isVacantAndWriteable(filepath: string): Promise<boolean> {
-  try {
-    await fs.access(filepath, fsConstants.W_OK);
-  } catch (e) {
-    if ((e as { code: string }).code === 'ENOENT') {
-      return true;
-    }
-  }
-  return false;
-}
-
-
-export async function bodyToBuffer(body: Uint8Array[]): Promise<Buffer> {
+export async function bodyToBuffer(body: Uint8Array[]): Promise<Uint8Array> {
   const buffers = [];
   let offset = 0;
   let size = 0;
@@ -75,7 +47,7 @@ export async function bodyToBuffer(body: Uint8Array[]): Promise<Buffer> {
     result.set(buffer, offset);
     offset += buffer.byteLength;
   }
-  return Buffer.from(result.buffer);
+  return result;
 }
 
 

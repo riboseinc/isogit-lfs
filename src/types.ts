@@ -1,4 +1,6 @@
-import type { HttpClient } from 'isomorphic-git/http/node';
+import type { HttpClient } from 'isomorphic-git';
+import type { AnyFsClient } from './fsUtils';
+
 
 
 export interface BasicAuth {
@@ -19,3 +21,11 @@ export interface HTTPRequest {
   /** Auth data for basic HTTP auth. */
   auth?: BasicAuth;
 }
+
+
+export interface FSUser {
+  fs: AnyFsClient;
+}
+
+
+export { type AnyFsClient };

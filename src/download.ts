@@ -1,9 +1,10 @@
-import path from 'path';
-import fsp from 'fs/promises';
+import type { Pointer } from './pointers';
+import type { HTTPRequest, FSUser } from './types';
+import { bodyToBuffer, getAuthHeader } from './util';
+import { unpackFs } from './fsUtils';
 
-import { bodyToBuffer, getAuthHeader, isWriteable } from './util';
-import { Pointer } from './pointers';
-import { HTTPRequest } from './types';
+
+const encoder = new TextEncoder();
 
 
 interface LFSInfoResponse {
@@ -27,12 +28,14 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
  * Uses already cached object, if size matches.
  */
 export default async function downloadBlobFromPointer(
-  { http: { request }, headers = {}, url, auth }: HTTPRequest,
+  { fs, http: { request }, headers = {}, url, auth }: HTTPRequest & FSUser,
   { info, objectPath }: Pointer,
-): Promise<Buffer> {
+): Promise<Uint8Array> {
+
+  const _fs = unpackFs(fs);
 
   try {
-    const cached = await fsp.readFile(objectPath);
+    const cached = await _fs.readFile(objectPath);
     if (cached.byteLength === info.size) {
       return cached;
     }
@@ -66,7 +69,7 @@ export default async function downloadBlobFromPointer(
       'Accept': 'application/vnd.git-lfs+json',
       'Content-Type': 'application/vnd.git-lfs+json',
     },
-    body: [Buffer.from(JSON.stringify(lfsInfoRequestData))],
+    body: [encoder.encode(JSON.stringify(lfsInfoRequestData))],
   });
 
   const lfsInfoResponseRaw = (await bodyToBuffer(lfsInfoBody)).toString();
@@ -99,11 +102,10 @@ export default async function downloadBlobFromPointer(
 
     const blob = await bodyToBuffer(lfsObjectBody);
 
-    // Write LFS cache for this object, if cache path is accessible.
-    if (await isWriteable(objectPath)) {
-      await fsp.mkdir(path.dirname(objectPath), { recursive: true });
-      await fsp.writeFile(objectPath, blob);
-    }
+    // Write LFS cache for this object.
+    const dirname = objectPath.substring(0, objectPath.lastIndexOf('/') + 1);
+    await _fs.mkdir(dirname, { recursive: true });
+    await _fs.writeFile(objectPath, blob);
 
     return blob;
 

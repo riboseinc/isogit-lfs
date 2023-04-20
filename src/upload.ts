@@ -3,6 +3,9 @@ import { buildPointerInfo, type PointerInfo } from './pointers';
 import { bodyToBuffer, getAuthHeader } from './util';
 
 
+const encoder = new TextEncoder();
+
+
 interface LFSInfoResponse {
   objects: {
     actions?: {
@@ -34,7 +37,7 @@ function isValidLFSInfoResponseData(val: Record<string, any>): val is LFSInfoRes
  */
 export default async function uploadBlob(
   { http: { request }, headers = {}, url, auth }: HTTPRequest,
-  content: Buffer,
+  content: Uint8Array,
 ): Promise<PointerInfo> {
 
   const info = await buildPointerInfo(content);
@@ -62,7 +65,7 @@ export default async function uploadBlob(
       'Accept': 'application/vnd.git-lfs+json',
       'Content-Type': 'application/vnd.git-lfs+json',
     },
-    body: [Buffer.from(JSON.stringify(lfsInfoRequestData))],
+    body: [encoder.encode(JSON.stringify(lfsInfoRequestData))],
   });
 
   const lfsInfoResponseRaw = (await bodyToBuffer(lfsInfoBody)).toString();

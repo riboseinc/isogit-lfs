@@ -1,9 +1,9 @@
-import fs from 'fs';
+import type { CallbackFsClient, PromiseFsClient } from 'isomorphic-git';
 
 import git from 'isomorphic-git';
-import http, { GitProgressEvent } from 'isomorphic-git/http/node';
+import http, { type GitProgressEvent } from 'isomorphic-git/http/node';
 
-import { isVacantAndWriteable, pointsToLFS } from './util';
+import { pointsToLFS, stripTrailingSlash } from './util';
 import downloadBlobFromPointer from './download';
 import { readPointer } from "./pointers";
 
@@ -28,6 +28,7 @@ type ProgressHandler = (progress: GitProgressEvent) => void
  * NOTE: onProgress currently doesn’t report loaded/total values accurately.
  */
 export default async function populateCache(
+  fs: CallbackFsClient | PromiseFsClient,
   workDir: string,
   remoteURL: string,
   ref: string = 'HEAD',
@@ -43,7 +44,11 @@ export default async function populateCache(
         return null;
       }
 
-      onProgress?.({ phase: `skimming: ${filepath}`, loaded: 5, total: 10 });
+      onProgress?.({
+        phase: `skimming: ${filepath}`,
+        loaded: 5,
+        total: 10,
+      });
 
       const [entry] = entries;
       const entryType = await entry.type();
@@ -56,21 +61,19 @@ export default async function populateCache(
         const content = await entry.content();
 
         if (content) {
-          const buff = Buffer.from(content.buffer);
+          if (pointsToLFS(content)) {
+            const pointer = readPointer({
+              gitdir: `${stripTrailingSlash(workDir)}/.git`,
+              content,
+            });
 
-          if (pointsToLFS(buff)) {
+            onProgress?.({
+              phase: `downloading: ${filepath}`,
+              loaded: 5,
+              total: 10,
+            });
 
-            const pointer = readPointer({ dir: workDir, content: buff });
-
-            // Don’t even start the download if LFS cache path is not accessible,
-            // or if it already exists
-            if (await isVacantAndWriteable(pointer.objectPath) === false)
-              return;
-
-            onProgress?.({ phase: `downloading: ${filepath}`, loaded: 5, total: 10 });
-
-            await downloadBlobFromPointer({ http, url: remoteURL }, pointer);
-
+            await downloadBlobFromPointer({ fs, http, url: remoteURL }, pointer);
           }
         }
       }

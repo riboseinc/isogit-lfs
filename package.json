@@ -1,7 +1,7 @@
 {
   "name": "@riboseinc/isogit-lfs",
-  "version": "0.1.6",
-  "description": "LFS helpers for Isomorphic Git (Node only)",
+  "version": "0.2.0",
+  "description": "LFS helpers for Isomorphic Git",
   "main": "index.js",
   "repository": "git@github.com:riboseinc/isogit-lfs.git",
   "scripts": {
@@ -21,15 +21,14 @@
     "email": "open.source@ribose.com"
   },
   "peerDependencies": {
-    "isomorphic-git": "^1.7.8",
-    "@aws-crypto/sha256-universal": "^2.0.0"
+    "@aws-crypto/sha256-universal": "^2.0.0",
+    "isomorphic-git": "^1.7.8"
   },
   "devDependencies": {
     "@aws-crypto/sha256-universal": "^2.0.0",
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
-    "@types/node": "^16.11.7",
     "isomorphic-git": "^1.7.8",
     "typescript": "^4.4.2"
   },

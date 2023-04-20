@@ -1,6 +1,8 @@
-import path from 'path';
 import { Sha256 } from '@aws-crypto/sha256-universal';
-import { SPEC_URL, toHex } from './util';
+import { SPEC_URL, toHex, stripTrailingSlash } from './util';
+
+
+const encoder = new TextEncoder();
 
 
 export interface PointerInfo {
@@ -23,7 +25,7 @@ function isValidPointerInfo(val: Record<string, any>): val is PointerInfo {
 }
 
 
-export function readPointerInfo(content: Buffer): PointerInfo {
+export function readPointerInfo(content: Uint8Array): PointerInfo {
   const info = content.toString().trim().split('\n').reduce((accum, line) => {
     const [k, v] = line.split(' ', 2);
     if (k === 'oid') {
@@ -43,38 +45,39 @@ export function readPointerInfo(content: Buffer): PointerInfo {
 
 
 interface PointerRequest {
-  dir: string;
-  gitdir?: string;
-  content: Buffer;
+  /** Absolute path to .git directory. */
+  gitdir: string;
+  content: Uint8Array;
 }
-export function readPointer({ dir, gitdir = path.join(dir, '.git'), content }: PointerRequest): Pointer {
+export function readPointer({ gitdir, content }: PointerRequest): Pointer {
   const info = readPointerInfo(content);
 
-  const objectPath = path.join(
-    gitdir,
+  const objectPath = [
+    stripTrailingSlash(gitdir),
     'lfs',
     'objects',
     info.oid.substr(0, 2),
     info.oid.substr(2, 2),
-    info.oid);
+    info.oid,
+  ].join('/');
 
   return { info, objectPath };
 }
 
 
 /** Formats given PointerInfo for writing in Git tree. */
-export function formatPointerInfo(info: PointerInfo): Buffer {
+export function formatPointerInfo(info: PointerInfo): Uint8Array {
   const lines = [
     `version ${SPEC_URL}`,
     `oid sha256:${info.oid}`,
     `size ${info.size}`,
   ];
-  return Buffer.from(lines.join('\n'));
+  return encoder.encode(lines.join('\n'));
 }
 
 
-export async function buildPointerInfo(content: Buffer): Promise<PointerInfo> {
-  const size = Buffer.byteLength(content);
+export async function buildPointerInfo(content: Uint8Array): Promise<PointerInfo> {
+  const size = content.byteLength;
   const hash = new Sha256();
   hash.update(content);
   const oid = toHex(await hash.digest());
