@@ -2,8 +2,8 @@ import type { HttpClient } from 'isomorphic-git/http/node';
 
 
 export interface BasicAuth {
-  username: string
-  password: string
+  username: string;
+  password: string;
 }
 
 
@@ -17,5 +17,5 @@ export interface HTTPRequest {
   url: string;
 
   /** Auth data for basic HTTP auth. */
-  auth?: BasicAuth
+  auth?: BasicAuth;
 }
