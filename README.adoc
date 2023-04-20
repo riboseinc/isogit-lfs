@@ -53,7 +53,7 @@ suitable to be stored in Git repository in place of actual object data.
 where `workDir` is a path to working directory,
 and `ref` should probably be left at the default `"HEAD"`.
 +
-NOTE: Very tentative API.
+NOTE: This particular function is a very tentative piece of API.
 
 
 == Known shortcomings
