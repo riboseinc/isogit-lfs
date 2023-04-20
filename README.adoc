@@ -58,7 +58,7 @@ NOTE: Very tentative API.
 
 == Known shortcomings
 
-- Works in Node runtime only
+- Works in Node runtime only (planned to be addressed in 0.2.0, see also issue #5).
 - @aws-crypto/sha256-universal peer dependency is unnecessary.
 If we’re Node-only we can probably achieve the same using Node’s `crypto` module,
 and if not we should place it in actual `dependencies`.
