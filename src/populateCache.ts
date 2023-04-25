@@ -1,7 +1,6 @@
-import type { CallbackFsClient, PromiseFsClient } from 'isomorphic-git';
-
 import git from 'isomorphic-git';
 import http, { type GitProgressEvent } from 'isomorphic-git/http/node';
+import type { AnyFsClient } from './fsUtils';
 
 import { pointsToLFS, stripTrailingSlash } from './util';
 import downloadBlobFromPointer from './download';
@@ -28,7 +27,7 @@ type ProgressHandler = (progress: GitProgressEvent) => void
  * NOTE: onProgress currently doesn’t report loaded/total values accurately.
  */
 export default async function populateCache(
-  fs: CallbackFsClient | PromiseFsClient,
+  fs: AnyFsClient,
   workDir: string,
   remoteURL: string,
   ref: string = 'HEAD',
