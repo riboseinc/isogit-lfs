@@ -5,6 +5,7 @@ import { unpackFs } from './fsUtils';
 
 
 const encoder = new TextEncoder();
+const decoder = new TextDecoder('utf-8');
 
 
 interface LFSInfoResponse {
@@ -72,7 +73,7 @@ export default async function downloadBlobFromPointer(
     body: [encoder.encode(JSON.stringify(lfsInfoRequestData))],
   });
 
-  const lfsInfoResponseRaw = (await bodyToBuffer(lfsInfoBody)).toString();
+  const lfsInfoResponseRaw = decoder.decode(await bodyToBuffer(lfsInfoBody));
   let lfsInfoResponseData: any;
   try {
     lfsInfoResponseData = JSON.parse(lfsInfoResponseRaw);

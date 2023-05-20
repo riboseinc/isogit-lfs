@@ -4,6 +4,7 @@ import { bodyToBuffer, getAuthHeader } from './util';
 
 
 const encoder = new TextEncoder();
+const decoder = new TextDecoder('utf-8');
 
 
 interface LFSInfoResponse {
@@ -68,7 +69,7 @@ export default async function uploadBlob(
     body: [encoder.encode(JSON.stringify(lfsInfoRequestData))],
   });
 
-  const lfsInfoResponseRaw = (await bodyToBuffer(lfsInfoBody)).toString();
+  const lfsInfoResponseRaw = decoder.decode(await bodyToBuffer(lfsInfoBody));
   let lfsInfoResponseData: any;
   try {
     lfsInfoResponseData = JSON.parse(lfsInfoResponseRaw);

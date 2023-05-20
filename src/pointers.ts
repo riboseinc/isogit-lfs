@@ -3,6 +3,7 @@ import { SPEC_URL, toHex, stripTrailingSlash } from './util';
 
 
 const encoder = new TextEncoder();
+const decoder = new TextDecoder('utf-8');
 
 
 export interface PointerInfo {
@@ -26,7 +27,7 @@ function isValidPointerInfo(val: Record<string, any>): val is PointerInfo {
 
 
 export function readPointerInfo(content: Uint8Array): PointerInfo {
-  const info = content.toString().trim().split('\n').reduce((accum, line) => {
+  const info = decoder.decode(content).trim().split('\n').reduce((accum, line) => {
     const [k, v] = line.split(' ', 2);
     if (k === 'oid') {
       accum[k] = v.split(':', 2)[1];
