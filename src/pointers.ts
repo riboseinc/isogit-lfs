@@ -50,6 +50,10 @@ interface PointerRequest {
   gitdir: string;
   content: Uint8Array;
 }
+/**
+ * Puts together a Pointer instance based on raw pointer data
+ * and path to git repository root (the .git dir for non-bare repos).
+ */
 export function readPointer({ gitdir, content }: PointerRequest): Pointer {
   const info = readPointerInfo(content);
 
