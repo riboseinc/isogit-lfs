@@ -17,7 +17,7 @@ Peer dependencies:
 
 == Usage
 
-As of 0.2.0 (to be released), API offers the following functions
+As of 0.2.0, API offers the following functions
 (blobs are Uint8Array instances):
 
 
