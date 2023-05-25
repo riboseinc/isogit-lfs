@@ -21,9 +21,9 @@ type ProgressHandler = (progress: GitProgressEvent) => void
  * NOTE: If LFS cache path, as extracted from the pointer,
  * is not writeable at the time of download start,
  * the object will be silently skipped.
- * 
+ *
  * NOTE: This function skips objects silently in case of errors.
- * 
+ *
  * NOTE: onProgress currently doesn’t report loaded/total values accurately.
  */
 export default async function populateCache(
