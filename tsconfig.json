@@ -4,6 +4,8 @@
       "module": "esnext",
       "moduleResolution": "node",
 
+      "lib": ["es2020", "dom"],
+
       "strict": true,
       "noUnusedLocals": true,
       "noFallthroughCasesInSwitch": true,
