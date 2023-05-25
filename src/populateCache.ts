@@ -2,7 +2,7 @@ import git from 'isomorphic-git';
 import http, { type GitProgressEvent } from 'isomorphic-git/http/node';
 import type { AnyFsClient } from './fsUtils';
 
-import { pointsToLFS, stripTrailingSlash } from './util';
+import { pointsToLFS } from './util';
 import downloadBlobFromPointer from './download';
 import { readPointer } from "./pointers";
 
@@ -28,14 +28,14 @@ type ProgressHandler = (progress: GitProgressEvent) => void
  */
 export default async function populateCache(
   fs: AnyFsClient,
-  workDir: string,
+  gitdir: string,
   remoteURL: string,
   ref: string = 'HEAD',
   onProgress?: ProgressHandler,
 ) {
   await git.walk({
     fs,
-    dir: workDir,
+    gitdir,
     trees: [git.TREE({ ref })],
     map: async function lfsDownloadingWalker(filepath, entries) {
 
@@ -62,7 +62,7 @@ export default async function populateCache(
         if (content) {
           if (pointsToLFS(content)) {
             const pointer = readPointer({
-              gitdir: `${stripTrailingSlash(workDir)}/.git`,
+              gitdir,
               content,
             });
 
