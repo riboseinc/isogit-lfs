@@ -17,10 +17,11 @@ Peer dependencies:
 
 == Usage
 
-As of 0.1.6, API offers the following functions:
+As of 0.2.0 (to be released), API offers the following functions
+(blobs are Uint8Array instances):
 
 
-- `downloadBlobFromPointer({ http, headers, url, auth }, lfsPointer) => Buffer`
+- `downloadBlobFromPointer({ http, headers, url, auth }, lfsPointer) => Uint8Array`
 +
 where `http` is an `HttpClient` as supported by Isomorphic Git,
 URL is repository URL
@@ -29,47 +30,56 @@ and `lfsPointer` is an object returned by `readPointer()`.
 Uses cache, if the object had been previously retrieved.
 
 
-- `uploadBlob({ http, headers, url, auth }, buffer) => LFSPointerInfo`
+- `uploadBlob({ http, headers, url, auth }, blob) => PointerInfo`
 +
 where first argument is the same as for the download function,
 and returned pointer info can be used to write a pointer file in place
 of actual object in Git repository (pass it through `formatPointerInfo()`).
 
 
-- `readPointer({ dir, gitdir, content }) => LFSPointer`
+- `readPointer({ gitdir, content }) => Pointer`
 +
-where `dir`, `gitdir` behavior mimics that of Isomorphic Git,
-and `content` is a `Buffer`.
-
-
-- `readPointerInfo(buffer) => LFSPointerInfo`
+where `gitdir` behavior mimics that of Isomorphic Git
+(for non-bare repositories it’s *not* working directory but the `.git` in it)
+and `content` is a `Uint8Array`.
 +
-reads a properly formatted LFS pointer within a Git repository.
+Returns an LFS pointer together with Git repo object path of the full blob
+(which may or may not be retrieved).
 
 
-- `formatPointerInfo(lfsPointerInfo) => Buffer`
+- `readPointerInfo(blob) => PointerInfo`
++
+converts a Uint8Array into an LFS pointer structure
+sufficient for requesting actual LFS blob.
+
+
+- `formatPointerInfo(lfsPointerInfo) => Uint8Array`
 +
 converts pointer info to appropriately formatted blob
 suitable to be stored in Git repository in place of actual object data.
 
 
-- `populateCache(workDir, ref?)`
+- `populateCache(gitdir, ref?)`
 +
-where `workDir` is a path to working directory,
+where `gitdir` is same as for `readPointer()`
 and `ref` should probably be left at the default `"HEAD"`.
 +
+Attempts to download all LFS objects.
++
 NOTE: This particular function is a very tentative piece of API.
+Downloads are not particularly optimized, it’s likely quite slow.
 
 
 == Known shortcomings
 
-- Works in Node runtime only (planned to be addressed in 0.2.0, see also issue #5).
-- @aws-crypto/sha256-universal peer dependency is unnecessary.
-If we’re Node-only we can probably achieve the same using Node’s `crypto` module,
-and if not we should place it in actual `dependencies`.
+- The `@aws-crypto/sha256-universal` dependency is suboptimal.
+It’s not that difficult to provide corresponding implementation using subtle crypto,
+which are compatible between Node and modern browsers.
+- Originally written for Node runtime, but should work in browser as of 0.2.0.
+- Lacks automated tests.
 
 == Considered within scope
 
 - Implement batch uploads and downloads (parallelise requests? use native batch API?)
 - Find a way to generalize UA header handling
-- Make it work in browser runtime as well (if feasible?)
+- Make it work in browser runtime as well (if feasible?) — should be done in 0.2.0
