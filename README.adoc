@@ -11,7 +11,7 @@ this library is in turn not likely to receive new features.
 
 Peer dependencies:
 
-- Isomorphic Git ^1.7.0
+- Isomorphic Git ^1.7.8
 - @aws-crypto/sha256-universal ^2.0.0
 
 
