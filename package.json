@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "git@github.com:riboseinc/isogit-lfs.git",
   "scripts": {
-    "build": "rm -r compiled dist && mkdir compiled dist && tsc --outDir compiled && babel compiled --out-dir dist && cp README.adoc package.json dist/ && rsync -a --include '*/' --include '*.d.ts' --include '*.js.map' --exclude '*' compiled/ dist/"
+    "build": "rm -r compiled/* dist/*; mkdir compiled dist && tsc --outDir compiled && babel compiled --out-dir dist && cp README.adoc package.json dist/ && rsync -a --include '*/' --include '*.d.ts' --include '*.js.map' --exclude '*' compiled/ dist/"
   },
   "files": [
     "README.adoc",
