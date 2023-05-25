@@ -73,8 +73,9 @@ Downloads are not particularly optimized, it’s likely quite slow.
 == Known shortcomings
 
 - The `@aws-crypto/sha256-universal` dependency is suboptimal.
-It’s not that difficult to provide corresponding implementation using subtle crypto,
-which are compatible between Node and modern browsers.
+It pulls extra dependencies of its own,
+while it’s not that difficult to provide corresponding implementation using subtle crypto
+which is compatible between Node and modern browsers.
 - Originally written for Node runtime, but should work in browser as of 0.2.0.
 - Lacks automated tests.
 
