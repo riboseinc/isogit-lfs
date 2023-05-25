@@ -1,6 +1,11 @@
 Aspirationally, a set of helpers
 to simplify working with Git LFS through Isomorphic Git.
 
+Currently the API is fairly low-level.
+
+NOTE: While Isomorphic Git maintenance status is unclear,
+this library is in turn not likely to receive new features.
+
 
 == Installation
 
