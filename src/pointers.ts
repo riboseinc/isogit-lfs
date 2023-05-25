@@ -14,6 +14,10 @@ export interface PointerInfo {
   size: number;
 }
 
+/**
+ * Associates `PointerInfo` with the path to corresponding blob
+ * within Git repository.
+ */
 export interface Pointer {
   info: PointerInfo;
 
