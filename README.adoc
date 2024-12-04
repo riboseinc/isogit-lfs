@@ -1,7 +1,10 @@
 Aspirationally, a set of helpers
 to simplify working with Git LFS through Isomorphic Git.
 
-Currently the API is fairly low-level.
+Currently the API is fairly low-level and verbose.
+
+The library does not touch working directory,
+letting the user integrate it into workflows based on bare Git repos.
 
 NOTE: While Isomorphic Git maintenance status is unclear,
 this library is in turn not likely to receive new features.
@@ -16,6 +19,48 @@ Peer dependencies:
 
 
 == Usage
+
+Example of using the library to read from LFS:
+
+```typescript
+import { pointsToLFS } from '@riboseinc/isogit-lfs/util.js';
+import { readPointer, downloadBlobFromPointer } from '@riboseinc/isogit-lfs';
+
+// We need to know the remote URL of this repository
+// in order to request LFS data
+// (this relies on Git config just for the sake of example)
+const remoteURL = await git.getConfig({ fs, gitdir, path: 'remote.origin.url' });
+
+async function readObject(fs, gitdir, oid, path): Promise<Uint8Array> {
+
+  // 1) Read some blob from the repo
+  const gitObject = await git.readBlob({ fs, gitdir, oid, filepath: path });
+  
+  // 2) Check if this blob points to LFS
+  if (pointsToLFS(gitObject.blob)) {
+
+    // If yes, 3) deserialize pointer
+    const pointer = readPointer({
+      gitdir,
+      content: gitObject.blob,
+    });
+
+    // 4) Request download
+    return await downloadBlobFromPointer({
+      fs,
+      url: remoteURL,
+      http,
+    }, pointer);
+
+  } else {
+    // If not, just return the blob straight away
+    return gitObject.blob;
+  }
+
+}
+```
+
+== API
 
 As of 0.2.0, API offers the following functions
 (blobs are Uint8Array instances):
@@ -72,6 +117,12 @@ of the download function.
 +
 NOTE: This particular function is a very tentative piece of API.
 Downloads are not particularly optimized, it’s likely quite slow.
+
+- `utils.pointsToLFS({ gitdir, content }) => boolan`
++
+where `gitdir` is same as for `readPointer()`
+and `content` is data of some object in the repository
+as `Uint8Array`.
 
 
 == Known shortcomings
