@@ -118,7 +118,7 @@ of the download function.
 NOTE: This particular function is a very tentative piece of API.
 Downloads are not particularly optimized, it’s likely quite slow.
 
-- `utils.pointsToLFS({ gitdir, content }) => boolan`
+- `utils.pointsToLFS({ gitdir, content }) => boolean`
 +
 where `gitdir` is same as for `readPointer()`
 and `content` is data of some object in the repository
