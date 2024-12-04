@@ -1,10 +1,13 @@
 Aspirationally, a set of helpers
 to simplify working with Git LFS through Isomorphic Git.
 
-Currently the API is fairly low-level and verbose.
+Currently the API is fairly low-level and verbose,
+which could be improved.
 
-The library does not touch working directory,
-letting the user integrate it into workflows based on bare Git repos.
+However, touching working directory is out of scope.
+Callers are free to integrate the library into workflows
+based on bare Git repositories or repositories with working directories
+depending on their specifics.
 
 NOTE: While Isomorphic Git maintenance status is unclear,
 this library is in turn not likely to receive new features.
