@@ -21,7 +21,7 @@ As of 0.2.0, API offers the following functions
 (blobs are Uint8Array instances):
 
 
-- `downloadBlobFromPointer({ http, headers, url, auth }, lfsPointer) => Uint8Array`
+- `downloadBlobFromPointer({ http, headers, url, auth }, lfsPointer) => Promise<Uint8Array>`
 +
 where `http` is an `HttpClient` as supported by Isomorphic Git,
 URL is repository URL
@@ -30,7 +30,7 @@ and `lfsPointer` is an object returned by `readPointer()`.
 Uses cache, if the object had been previously retrieved.
 
 
-- `uploadBlob({ http, headers, url, auth }, blob) => PointerInfo`
+- `uploadBlob({ http, headers, url, auth }, blob) => Promise<PointerInfo>`
 +
 where first argument is the same as for the download function,
 and returned pointer info can be used to write a pointer file in place
@@ -59,7 +59,7 @@ converts pointer info to appropriately formatted blob
 suitable to be stored in Git repository in place of actual object data.
 
 
-- `populateCache(gitdir, ref?)`
+- `populateCache(gitdir, ref?) => Promise<void>`
 +
 where `gitdir` is same as for `readPointer()`
 and `ref` should probably be left at the default `"HEAD"`.
