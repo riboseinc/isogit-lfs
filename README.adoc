@@ -45,7 +45,7 @@ async function readObject(fs, gitdir, oid, path): Promise<Uint8Array> {
       content: gitObject.blob,
     });
 
-    // 4) Request download
+    // 4) Download or retrieve from cache
     return await downloadBlobFromPointer({
       fs,
       url: remoteURL,
