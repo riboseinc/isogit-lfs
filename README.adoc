@@ -75,13 +75,15 @@ where `http` is an `HttpClient` as supported by Isomorphic Git,
 URL is repository URL
 and `lfsPointer` is an object returned by `readPointer()`.
 +
+Downloads the object if necessary and returns the full blob.
++
 Uses LFS cache (which is hidden in Git repo structure,
 under `.git/lfs` for non-bare repositories) if the object had been previously retrieved.
 
 
 - `uploadBlob({ http, headers, url, auth }, blob) => Promise<PointerInfo>`
 +
-where first argument is the same as for the download function,
+where first argument is the same as for `downloadBlobFromPointer()`,
 and returned pointer info can be used to write a pointer file in place
 of actual object in Git repository (pass it through `formatPointerInfo()`).
 
@@ -114,10 +116,10 @@ in place of actual object data.
 where `gitdir` is same as for `readPointer()`
 and `ref` should probably be left at the default `"HEAD"`.
 +
-Attempts to download all LFS objects in the tree of `ref`.
+Attempts to download all LFS-stored objects in the tree of `ref`.
 Does not return anything or write anything in working directory
 but lets the blobs be cached for subsequently faster invocations
-of the download function.
+of `downloadBlobFromPointer()`.
 +
 NOTE: This particular function is a very tentative piece of API.
 Downloads are not particularly optimized, it’s likely quite slow.
