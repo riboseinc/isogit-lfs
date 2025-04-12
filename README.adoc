@@ -101,6 +101,15 @@ to the full blob in cache (which at this point may or may not exist).
 Return value intended to be passed as the second argument
 to `downloadBlobFromPointer()`.
 
+
+- `utils.pointsToLFS({ gitdir, content }) => boolean`
++
+where the arguments are identical to `readPointer()` above.
++
+Returns `true` if given object’s blob that you obtained via Isomorphic Git
+is an LFS pointer in place of actual object data. 
+
+
 - `populateCache(gitdir, ref?) => Promise<void>`
 +
 where `gitdir` is same as for `readPointer()`
@@ -114,13 +123,9 @@ of `downloadBlobFromPointer()`.
 NOTE: This particular function is a very tentative piece of API.
 Downloads are not particularly optimized, it’s likely quite slow.
 
-- `utils.pointsToLFS({ gitdir, content }) => boolean`
-+
-where `gitdir` is same as for `readPointer()`
-and `content` is data of some object in the repository
-as `Uint8Array`.
 
 Lower-level functions you probably won’t need to call:
+
 
 - `readPointerInfo(blob) => PointerInfo`
 +
