@@ -34,6 +34,15 @@ import { readPointer, downloadBlobFromPointer } from '@riboseinc/isogit-lfs';
 // (this relies on Git config just for the sake of example)
 const remoteURL = await git.getConfig({ fs, gitdir, path: 'remote.origin.url' });
 
+/**
+ * Read data for an object in given repository (`gitdir`)
+ * at particular commit (`oid`)
+ * at particular repository-relative path (`path`)
+ * using supplied filesystem implementation (`fs`).
+ *
+ * Different from `readBlob()` in that it also handles
+ * LFS, downloading & caching objects automatically.
+ */
 async function readObject(fs, gitdir, oid, path): Promise<Uint8Array> {
 
   // 1) Read some blob from the repo
@@ -102,7 +111,7 @@ Return value intended to be passed as the second argument
 to `downloadBlobFromPointer()`.
 
 
-- `utils.pointsToLFS({ gitdir, content }) => boolean`
+- `util.pointsToLFS({ gitdir, content }) => boolean`
 +
 where the arguments are identical to `readPointer()` above.
 +
