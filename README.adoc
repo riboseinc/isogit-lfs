@@ -92,10 +92,14 @@ of actual object in Git repository (pass it through `formatPointerInfo()`).
 +
 where `gitdir` behavior mimics that of Isomorphic Git
 (for non-bare repositories it’s *not* working directory but the `.git` in it)
-and `content` is a `Uint8Array`.
+and `content` is a blob, `Uint8Array`-encoded version of a pointer
+you would find stored in Git instead of a full blob where LFS is used.
 +
-Returns an LFS pointer together with Git repo object path to the full blob
-(which at this point may or may not have been retrieved).
+Returns decoded LFS pointer structure together with Git repo object path
+to the full blob in cache (which at this point may or may not exist).
++
+Return value intended to be passed as the second argument
+to `downloadBlobFromPointer()`.
 
 
 - `readPointerInfo(blob) => PointerInfo`
