@@ -66,7 +66,7 @@ async function readObject(fs, gitdir, oid, path): Promise<Uint8Array> {
 == API
 
 As of 0.2.0, API offers the following functions
-(blobs are Uint8Array instances):
+(where blobs are Uint8Array instances you obtain from or give to Isomorphic Git):
 
 
 - `downloadBlobFromPointer({ http, headers, url, auth }, lfsPointer) => Promise<Uint8Array>`
@@ -92,20 +92,21 @@ where `gitdir` behavior mimics that of Isomorphic Git
 (for non-bare repositories it’s *not* working directory but the `.git` in it)
 and `content` is a `Uint8Array`.
 +
-Returns an LFS pointer together with Git repo object path of the full blob
-(which may or may not be retrieved).
+Returns an LFS pointer together with Git repo object path to the full blob
+(which at this point may or may not have been retrieved).
 
 
 - `readPointerInfo(blob) => PointerInfo`
 +
-converts a Uint8Array into an LFS pointer structure
+decodes a Uint8Array blob of an LFS pointer into an LFS pointer structure
 sufficient for requesting actual LFS blob.
 
 
 - `formatPointerInfo(lfsPointerInfo) => Uint8Array`
 +
-converts pointer info to appropriately formatted blob
-suitable to be stored in Git repository in place of actual object data.
+serializes LFS pointer structure to an appropriately formatted string
+and encodes it as a blob suitable to be stored in Git repository
+in place of actual object data.
 
 
 - `populateCache(gitdir, ref?) => Promise<void>`
