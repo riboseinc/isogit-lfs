@@ -101,20 +101,6 @@ to the full blob in cache (which at this point may or may not exist).
 Return value intended to be passed as the second argument
 to `downloadBlobFromPointer()`.
 
-
-- `readPointerInfo(blob) => PointerInfo`
-+
-decodes a Uint8Array blob of an LFS pointer into an LFS pointer structure
-sufficient for requesting actual LFS blob.
-
-
-- `formatPointerInfo(lfsPointerInfo) => Uint8Array`
-+
-serializes LFS pointer structure to an appropriately formatted string
-and encodes it as a blob suitable to be stored in Git repository
-in place of actual object data.
-
-
 - `populateCache(gitdir, ref?) => Promise<void>`
 +
 where `gitdir` is same as for `readPointer()`
@@ -133,6 +119,20 @@ Downloads are not particularly optimized, it’s likely quite slow.
 where `gitdir` is same as for `readPointer()`
 and `content` is data of some object in the repository
 as `Uint8Array`.
+
+Lower-level functions you probably won’t need to call:
+
+- `readPointerInfo(blob) => PointerInfo`
++
+decodes a Uint8Array blob of an LFS pointer into an LFS pointer structure
+sufficient for requesting actual LFS blob.
+
+
+- `formatPointerInfo(lfsPointerInfo) => Uint8Array`
++
+serializes LFS pointer structure to an appropriately formatted string
+and encodes it as a blob suitable to be stored in Git repository
+in place of actual object data.
 
 
 == Known shortcomings
