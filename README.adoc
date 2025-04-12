@@ -116,7 +116,7 @@ and `ref` should probably be left at the default `"HEAD"`.
 +
 Attempts to download all LFS objects in the tree of `ref`.
 Does not return anything or write anything in working directory
-except lets the blobs be cached for subsequently faster invocations
+but lets the blobs be cached for subsequently faster invocations
 of the download function.
 +
 NOTE: This particular function is a very tentative piece of API.
